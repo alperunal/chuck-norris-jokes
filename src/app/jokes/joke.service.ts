@@ -1,13 +1,15 @@
 import {IJoke} from './joke.model';
 import {HttpClient, HttpResponse} from '@angular/common/http';
-import {Injectable} from '@angular/core';
+import {EventEmitter, Injectable} from '@angular/core';
 import {Observable, Subject} from 'rxjs';
 import {map} from 'rxjs/operators';
+import {MatTabChangeEvent} from '@angular/material';
 
 @Injectable()
 export class JokeService {
   favouriteJokes: IJoke[] = [];
   favouriteJokesChange = new Subject<boolean>();
+  tabChange = new EventEmitter<MatTabChangeEvent>();
   localStorage = window.localStorage;
 
   constructor(private http: HttpClient) {

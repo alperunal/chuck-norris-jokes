@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, EventEmitter, OnInit} from '@angular/core';
 import {JokeService} from './joke.service';
+import {MatTabChangeEvent} from '@angular/material';
 
 @Component({
   selector: 'app-jokes',
@@ -10,6 +11,11 @@ export class JokesComponent implements OnInit {
 
   constructor(private jokeService: JokeService) { }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
+
+  change(event: MatTabChangeEvent) {
+    this.jokeService.tabChange.emit(event);
+  }
 
 }

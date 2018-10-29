@@ -1,0 +1,16 @@
+<section class="container">
+  <form class="form" *ngIf="myProfile">
+    <mat-form-field>
+      <input type="email" matInput placeholder="E-mail" name="email" [(ngModel)]="myProfile.email" disabled/>
+    </mat-form-field>
+    <mat-form-field>
+      <input type="text" matInput placeholder="Username" name="username" [(ngModel)]="myProfile.username" disabled/>
+    </mat-form-field>
+    <mat-form-field>
+      <input type="text" matInput placeholder="First Name" name="firstname" [(ngModel)]="myProfile.firstname" disabled/>
+    </mat-form-field>
+    <mat-form-field>
+      <input type="text" matInput placeholder="Last Name" name="lastname" [(ngModel)]="myProfile.lastname" disabled/>
+    </mat-form-field>
+  </form>
+</section>

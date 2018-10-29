@@ -6,6 +6,16 @@ a {
 mat-toolbar {
   display: flex;
   justify-content: space-between;
+  align-items: center;
+}
+
+.material-icons {
+  cursor: pointer;
+}
+
+.icons {
+  display: flex;
+  align-items: center;
 }
 
 .nav-item {
@@ -17,4 +27,8 @@ mat-toolbar {
   list-style: none;
   padding: 0;
   margin: 0;
+}
+
+.logo {
+  height: 60px;
 }

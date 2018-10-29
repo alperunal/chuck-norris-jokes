@@ -15,6 +15,8 @@ import { RandomJokesComponent } from './jokes/random-jokes/random-jokes.componen
 import {AuthService} from './auth/auth.service';
 import {JokeService} from './jokes/joke.service';
 import {HttpClientModule} from '@angular/common/http';
+import {AuthGuardService} from './auth/auth-guard.service';
+import { ProfileComponent } from './profile/profile.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +26,8 @@ import {HttpClientModule} from '@angular/common/http';
     JokesComponent,
     FavouriteJokesComponent,
     HeaderComponent,
-    RandomJokesComponent
+    RandomJokesComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule,
@@ -37,7 +40,8 @@ import {HttpClientModule} from '@angular/common/http';
   ],
   providers: [
     AuthService,
-    JokeService
+    JokeService,
+    AuthGuardService,
   ],
   bootstrap: [AppComponent]
 })

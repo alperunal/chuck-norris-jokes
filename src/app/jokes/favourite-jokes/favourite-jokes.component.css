@@ -4,6 +4,11 @@
   align-items: center;
 }
 
+.toggle {
+  display: flex;
+  justify-content: center;
+}
+
 mat-card {
   box-sizing: border-box;
   width: 375px;
@@ -15,4 +20,12 @@ mat-card-actions {
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
+}
+
+@media (min-width: 1200px) {
+  .card-list {
+    flex-direction: row;
+    justify-content: space-around;
+    flex-wrap: wrap;
+  }
 }

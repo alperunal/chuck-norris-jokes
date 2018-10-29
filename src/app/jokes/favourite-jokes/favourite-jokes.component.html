@@ -1,8 +1,10 @@
 <div *ngIf="!isAuth">
   You need to be logged in see your favourites!
 </div>
-<section class="card-list">
+<div class="toggle">
   <mat-slide-toggle color="primary" [checked]="autoFavourite" (change)="changeAutoFavourite($event)">Auto Favourite</mat-slide-toggle>
+</div>
+<section class="card-list" *ngIf="isAuth">
   <div *ngFor="let favouriteJoke of favouriteJokes">
     <mat-card>
       <mat-card-content>{{favouriteJoke.joke}}</mat-card-content>

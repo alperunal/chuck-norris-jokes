@@ -1,0 +1,25 @@
+<section class="signup-container">
+  <form class="sigup-form" [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+    <mat-form-field>
+      <input type="email" matInput placeholder="E-mail" formControlName="email" required/>
+    </mat-form-field>
+    <mat-form-field>
+      <input type="text" matInput placeholder="Username" formControlName="username" required/>
+    </mat-form-field>
+    <div class="passwords" formGroupName="passwords">
+      <mat-form-field>
+        <input type="password" matInput placeholder="Password" name="password" required/>
+      </mat-form-field>
+      <mat-form-field>
+        <input type="password" matInput placeholder="Repeat Password" name="repeatPassword" required/>
+      </mat-form-field>
+    </div>
+    <mat-form-field>
+      <input type="text" matInput placeholder="First Name" formControlName="firstname"/>
+    </mat-form-field>
+    <mat-form-field>
+      <input type="text" matInput placeholder="Last Name" formControlName="lastname"/>
+    </mat-form-field>
+    <button mat-raised-button color="primary" [disabled]="signupForm.invalid">Sign Up</button>
+  </form>
+</section>

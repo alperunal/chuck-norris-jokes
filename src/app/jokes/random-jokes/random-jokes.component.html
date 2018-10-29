@@ -1,0 +1,15 @@
+<section class="card-list">
+  <div *ngFor="let randomJoke of randomJokes | async">
+    <mat-card>
+      <mat-card-content>{{randomJoke.joke}}</mat-card-content>
+      <mat-card-actions>
+        <i class="material-icons" *ngIf="!isFavourite(randomJoke.id)" (click)="favourite(true, randomJoke)">
+          favorite_border
+        </i>
+        <i class="material-icons" *ngIf="isFavourite(randomJoke.id)" (click)="favourite(false, randomJoke)">
+          favorite
+        </i>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</section>

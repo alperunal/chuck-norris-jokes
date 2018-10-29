@@ -1,0 +1,18 @@
+<mat-toolbar color="primary">
+  <div class="logo">
+    <a routerLink="">Chuck Norris</a>
+  </div>
+  <div class="nav">
+    <ul class="nav-items">
+      <li class="nav-item" *ngIf="!isAuth">
+        <a routerLink="/login">Login</a>
+      </li>
+      <li class="nav-item" *ngIf="!isAuth">
+        <a routerLink="/signup">Sign Up</a>
+      </li>
+      <li class="nav-item" *ngIf="isAuth">
+        <a routerLink="/signup">Logout</a>
+      </li>
+    </ul>
+  </div>
+</mat-toolbar>

@@ -1,0 +1,11 @@
+<section class="login-container">
+  <form class="login-form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <mat-form-field>
+      <input type="email" matInput placeholder="E-mail" formControlName="email"/>
+    </mat-form-field>
+    <mat-form-field>
+      <input type="password" matInput placeholder="Password" name="password"/>
+    </mat-form-field>
+    <button mat-raised-button color="primary" [disabled]="loginForm.invalid">Login</button>
+  </form>
+</section>

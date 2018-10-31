@@ -1,6 +1,7 @@
 import {Component, EventEmitter, OnInit} from '@angular/core';
 import {JokeService} from './joke.service';
 import {MatTabChangeEvent} from '@angular/material';
+import {AuthService} from '../auth/auth.service';
 
 @Component({
   selector: 'app-jokes',
@@ -9,9 +10,13 @@ import {MatTabChangeEvent} from '@angular/material';
 })
 export class JokesComponent implements OnInit {
 
-  constructor(private jokeService: JokeService) { }
+  constructor(private jokeService: JokeService,
+              private authService: AuthService) { }
 
   ngOnInit() {
+    if (this.authService.isAuth()) {
+      this.jokeService.initFavouriteJokes();
+    }
   }
 
   change(event: MatTabChangeEvent) {

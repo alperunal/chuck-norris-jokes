@@ -17,6 +17,8 @@ import {JokeService} from './jokes/joke.service';
 import {HttpClientModule} from '@angular/common/http';
 import {AuthGuardService} from './auth/auth-guard.service';
 import { ProfileComponent } from './profile/profile.component';
+import {UtilService} from './util.service';
+import {ToastrModule} from 'ngx-toastr';
 
 @NgModule({
   declarations: [
@@ -32,6 +34,7 @@ import { ProfileComponent } from './profile/profile.component';
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
+    ToastrModule.forRoot(),
     AppRoutingModule,
     MaterialModule,
     FormsModule,
@@ -42,6 +45,7 @@ import { ProfileComponent } from './profile/profile.component';
     AuthService,
     JokeService,
     AuthGuardService,
+    UtilService
   ],
   bootstrap: [AppComponent]
 })

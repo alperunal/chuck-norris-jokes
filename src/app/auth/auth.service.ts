@@ -5,34 +5,26 @@ import {HttpClient, HttpHeaders, HttpResponse} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {Router} from '@angular/router';
 import {map} from 'rxjs/operators';
-import {deprecate} from 'util';
+import {environment} from '../../environments/environment';
+import {UtilService} from '../util.service';
+import {ToastrService} from 'ngx-toastr';
 
 @Injectable()
 export class AuthService {
   authChange = new Subject<boolean>();
-  private readonly host = 'http://localhost:3000';
+  private readonly host = environment.apiUrl;
   private storage = window.localStorage;
   private readonly tokenKey = 'access-token';
 
   constructor(private http: HttpClient,
-              private router: Router) {}
+              private router: Router,
+              private utilService: UtilService,
+              private toastr: ToastrService) {}
 
-  private generateId(): string {
-    return Math.round(Math.random() * 10000).toString();
-  }
-
-  signUp(authData: IAuthData): void {
-    /*
-    this.user = {
-      email: authData.email,
-      id: this.generateId()
-    };
-    */
-  }
+  signUp(authData: IAuthData): void {}
 
   login(authData: IAuthData): void {
-    this.authChange.next(true);
-
+    this.utilService.setIsLoading(true);
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
     });
@@ -42,9 +34,14 @@ export class AuthService {
       .subscribe(
       (response: HttpResponse<any>) => {
         this.setToken(response['token']);
+        this.authChange.next(true);
         this.router.navigate(['']);
+        this.toastr.success('Logged in');
+        this.utilService.setIsLoading(false);
       }, (error: Error) => {
-      console.log(error);
+        this.utilService.setIsLoading(false);
+        console.log(error);
+        this.toastr.error(error['error'].err);
     });
   }
 
@@ -52,13 +49,14 @@ export class AuthService {
     this.removeToken();
     this.authChange.next(false);
     this.router.navigate(['']);
+    this.toastr.success('Logged out');
   }
 
   private setToken(value: string): void {
     this.storage.setItem(this.tokenKey, value);
   }
 
-  private getToken(): string {
+  getToken(): string {
     return this.storage.getItem(this.tokenKey);
   }
 
@@ -92,8 +90,16 @@ export class AuthService {
       }));
   }
 
-  /*
-  API Verification
+  healthCheck(): Observable<any> {
+    return this.http.get(`${this.host}/healthcheck`)
+      .pipe(map(
+        (response: HttpResponse<any>) => {
+          // @ts-ignore
+          return response.status === 'OK';
+        }
+      ));
+  }
+
   isAuthenticated(): Observable<any> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
@@ -102,5 +108,4 @@ export class AuthService {
 
     return this.http.get(`${this.host}/login/verify`, {headers: headers});
   }
-  */
 }

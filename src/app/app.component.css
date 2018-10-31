@@ -1,3 +1,9 @@
 main {
   margin-top: 5px;
 }
+
+.loading-spinner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

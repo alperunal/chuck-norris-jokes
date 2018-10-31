@@ -1,7 +1,7 @@
-<div *ngIf="!isAuth">
+<div *ngIf="!isAuth" class="warning">
   You need to be logged in see your favourites!
 </div>
-<div class="toggle">
+<div class="toggle" *ngIf="isAuth">
   <mat-slide-toggle color="primary" [checked]="autoFavourite" (change)="changeAutoFavourite($event)">Auto Favourite</mat-slide-toggle>
 </div>
 <section class="card-list" *ngIf="isAuth">

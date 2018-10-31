@@ -1,4 +1,13 @@
-<app-header></app-header>
-<main>
-  <router-outlet></router-outlet>
-</main>
+<div *ngIf="!isServerOnline">
+  Loading...
+</div>
+<div *ngIf="isServerOnline">
+  <app-header></app-header>
+  <main *ngIf="!isLoading">
+    <router-outlet></router-outlet>
+  </main>
+  <div class="loading-spinner" *ngIf="isLoading">
+    <img src="../assets/images/loading.gif">
+  </div>
+</div>
+

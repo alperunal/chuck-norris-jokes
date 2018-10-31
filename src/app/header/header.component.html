@@ -10,7 +10,7 @@
   <div class="icons">
     <mat-menu #appMenu="matMenu">
       <button mat-menu-item routerLink="/login" *ngIf="!isAuth">Login</button>
-      <button mat-menu-item routerLink="/signup" *ngIf="!isAuth">Sign Up</button>
+      <button mat-menu-item routerLink="/signup" *ngIf="!isAuth" disabled>Sign Up</button>
       <button mat-menu-item routerLink="/profile" *ngIf="isAuth">My Profile</button>
       <button mat-menu-item (click)="logout()" *ngIf="isAuth">Logout</button>
     </mat-menu>

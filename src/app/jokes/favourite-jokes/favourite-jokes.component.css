@@ -5,8 +5,14 @@
 }
 
 .toggle {
+  margin-top: 25px;
   display: flex;
   justify-content: center;
+}
+
+.warning {
+  text-align: center;
+  margin-top: 25px;
 }
 
 mat-card {
@@ -27,5 +33,8 @@ mat-card-actions {
     flex-direction: row;
     justify-content: space-around;
     flex-wrap: wrap;
+    max-width: 750px;
+    margin-left: auto;
+    margin-right: auto;
   }
 }

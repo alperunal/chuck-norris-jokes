@@ -23,5 +23,8 @@ mat-card {
     flex-direction: row;
     justify-content: space-around;
     flex-wrap: wrap;
+    max-width: 750px;
+    margin-left: auto;
+    margin-right: auto;
   }
 }

@@ -1,3 +1,6 @@
+# Chuck Norris Jokes
+![](chuck.gif)
+
 ## Requirements
 **Node.js version must be  `8.x`  or greater and npm version must be  `5.x`  or greater.**
 

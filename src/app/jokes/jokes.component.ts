@@ -10,13 +10,9 @@ import {AuthService} from '../auth/auth.service';
 })
 export class JokesComponent implements OnInit {
 
-  constructor(private jokeService: JokeService,
-              private authService: AuthService) { }
+  constructor(private jokeService: JokeService) { }
 
   ngOnInit() {
-    if (this.authService.isAuth()) {
-      this.jokeService.initFavouriteJokes();
-    }
   }
 
   change(event: MatTabChangeEvent) {

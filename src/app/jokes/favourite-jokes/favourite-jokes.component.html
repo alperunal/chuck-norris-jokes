@@ -1,15 +1,15 @@
-<div *ngIf="!isAuth" class="warning">
+<div *ngIf="!(authState | async).authenticated" class="warning">
   You need to be logged in see your favourites!
 </div>
-<div class="toggle" *ngIf="isAuth">
+<div class="toggle" *ngIf="(authState | async).authenticated">
   <mat-slide-toggle color="primary" [checked]="autoFavourite" (change)="changeAutoFavourite($event)">Auto Favourite</mat-slide-toggle>
 </div>
-<section class="card-list" *ngIf="isAuth">
-  <div *ngFor="let favouriteJoke of favouriteJokes">
+<section class="card-list">
+  <div *ngFor="let favouriteJoke of (favouriteJokesState | async).favourites">
     <mat-card>
-      <mat-card-content>{{favouriteJoke.joke}}</mat-card-content>
+      <mat-card-content [innerHTML]="favouriteJoke.joke"></mat-card-content>
       <mat-card-actions>
-        <button type="button" mat-raised-button color="primary" (click)="favourite(false, favouriteJoke)">Remove</button>
+        <button type="button" mat-raised-button color="primary" (click)="removeFavourite(favouriteJoke)">Remove</button>
       </mat-card-actions>
     </mat-card>
   </div>

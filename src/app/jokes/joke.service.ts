@@ -5,43 +5,25 @@ import {Observable, Subject} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {MatTabChangeEvent} from '@angular/material';
 import {environment} from '../../environments/environment';
-import {AuthService} from '../auth/auth.service';
+import {Store} from '@ngrx/store';
+import * as fromApp from '../store/app.reducers';
+import * as FavouriteJokesActions from '../jokes/store/jokes.actions';
 
 @Injectable()
 export class JokeService {
-  favouriteJokes: IJoke[] = [];
-  favouriteJokesChange = new Subject<boolean>();
   tabChange = new EventEmitter<MatTabChangeEvent>();
-  // localStorage = window.localStorage;
   private readonly host = environment.apiUrl;
 
   constructor(private http: HttpClient,
-              private authService: AuthService) {
+              private store: Store<fromApp.AppState>) {
 
-    /*
-    ** local storage
-    const favJokes = this.localStorage.getItem('favouriteJokes');
-    if (favJokes !== null) {
-      this.favouriteJokes = JSON.parse(favJokes);
-    }
-    */
   }
 
   initFavouriteJokes(): void {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + this.authService.getToken()
-    });
-
-    this.http.get(`${this.host}/api/v1/favourite-jokes`, {headers: headers}).subscribe(
+    this.http.get(`${this.host}/api/v1/favourite-jokes`).subscribe(
       (response: any) => {
-        if (this.authService.isAuth()) {
-          const favouriteJokes = JSON.parse(response.favourites);
-          if (favouriteJokes !== null) {
-            this.favouriteJokes = favouriteJokes;
-            this.favouriteJokesChange.next(true);
-          }
-        }
+        const favouriteJokes: IJoke[] = JSON.parse(response.favourites);
+        this.store.dispatch(new FavouriteJokesActions.SetJokes(favouriteJokes));
       }
     );
   }
@@ -62,39 +44,20 @@ export class JokeService {
       }));
   }
 
-  getFavouriteJokes(): IJoke[] {
-    return [ ...this.favouriteJokes ];
-  }
-
-  favouriteJoke(status: boolean, joke: IJoke): void {
-    if (status && this.favouriteJokes.length < 10) {
-      this.favouriteJokes.push(joke);
-    } else {
-      const i = this.favouriteJokes.findIndex(val => val.id === joke.id);
-      if (i !== -1) {
-        this.favouriteJokes.splice(i, 1);
-      }
-    }
-    // this.localStorage.setItem('favouriteJokes', JSON.stringify(this.favouriteJokes));
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + this.authService.getToken()
+  favouriteJokes(jokes: IJoke[]): void {
+    this.http.put(`${this.host}/api/v1/favourite-jokes`, JSON.stringify(jokes)).subscribe((res) => {
+      console.log(res);
     });
-    this.http.put(`${this.host}/api/v1/favourite-jokes`, JSON.stringify(this.favouriteJokes), {headers: headers}).subscribe(
-      (response: HttpResponse<Response>) => {
-        // console.log(response);
-        this.favouriteJokesChange.next(true);
-      }, (error: Error) => {
-        console.log(error);
-      }
-    );
   }
 
-  isFavourite(id: number): boolean {
-    return !!this.favouriteJokes.find((value) => {
-      if (value.id === id) {
-        return true;
-      }
+  favouriteJoke(jokeId: number, status: boolean): void {
+    this.http.put(`${this.host}/api/v1/favourite-jokes`,
+      {
+        jokeId: jokeId,
+        status: status
+      })
+      .subscribe((res) => {
+        console.log(res);
     });
   }
 }

@@ -1,9 +1,13 @@
 import {Component, EventEmitter, OnInit} from '@angular/core';
 import {IJoke} from '../joke.model';
 import {JokeService} from '../joke.service';
-import {Subscription} from 'rxjs';
+import {Observable} from 'rxjs';
 import {AuthService} from '../../auth/auth.service';
-import {HttpResponse} from '@angular/common/http';
+import {Store} from '@ngrx/store';
+import * as fromApp from '../../store/app.reducers';
+import * as fromJokes from '../store/jokes.reducers';
+import * as FavouriteJokesActions from '../store/jokes.actions';
+import * as fromAuth from '../../auth/store/auth.reducers';
 
 @Component({
   selector: 'app-favourite-jokes',
@@ -11,45 +15,26 @@ import {HttpResponse} from '@angular/common/http';
   styleUrls: ['./favourite-jokes.component.css']
 })
 export class FavouriteJokesComponent implements OnInit {
-  favouriteJokes: IJoke[] = [];
-  favSubs: Subscription;
-  isAuth = false;
+  favouriteJokesState: Observable<fromJokes.State>;
   autoFavourite = false;
   autoFavouriteChange: EventEmitter<boolean> = new EventEmitter();
   intervalId: number;
+  authState: Observable<fromAuth.State>;
 
   constructor(private jokeService: JokeService,
-              private authService: AuthService) { }
+              private authService: AuthService,
+              private store: Store<fromApp.AppState>) { }
 
   ngOnInit() {
-    this.favouriteJokes = this.jokeService.getFavouriteJokes();
-    this.favSubs = this.jokeService.favouriteJokesChange.subscribe(() => {
-      this.favouriteJokes = this.jokeService.getFavouriteJokes();
-    });
-    /* this.authService.isAuthenticated().subscribe((response: HttpResponse<any>) => {
-      if (response['msg'] === 'Authorized') {
-        this.isAuth = true;
-      } else {
-        this.isAuth = false;
-      }
-    }, (error: Error) => {
-      this.isAuth = false;
-      console.log(error);
-    }); */
-    this.isAuth = this.authService.isAuth();
-    this.authService.authChange.subscribe((status: boolean) => {
-      this.isAuth = status;
-    });
+    this.favouriteJokesState = this.store.select('jokes');
+    this.authState = this.store.select('auth');
 
-    /*
-      Turn on/off a timer (every 5 seconds) which will add one random joke to the favorites list
-    */
     this.autoFavouriteChange.subscribe((status) => {
       if (status) {
         this.intervalId = setInterval(() => {
-          if (this.autoFavourite && this.favouriteJokes.length < 10) {
+          if (this.autoFavourite) {
             this.jokeService.getRandomJoke().subscribe((joke: IJoke) => {
-              this.jokeService.favouriteJoke(true, joke);
+              this.store.dispatch(new FavouriteJokesActions.AddJoke(joke));
             });
           }
         }, 5000);
@@ -64,7 +49,7 @@ export class FavouriteJokesComponent implements OnInit {
     this.autoFavouriteChange.emit(event.checked);
   }
 
-  favourite(fav: boolean, joke: IJoke): void {
-    this.jokeService.favouriteJoke(fav, joke);
+  removeFavourite(joke: IJoke): void {
+    this.store.dispatch(new FavouriteJokesActions.RemoveJoke(joke));
   }
 }

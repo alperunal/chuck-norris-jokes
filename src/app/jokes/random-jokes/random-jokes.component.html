@@ -1,8 +1,8 @@
 <section class="card-list">
   <div *ngFor="let randomJoke of randomJokes | async" class="card-wrapper">
     <mat-card>
-      <mat-card-content>{{randomJoke.joke}}</mat-card-content>
-      <mat-card-actions *ngIf="isAuth">
+      <mat-card-content [innerHTML]="randomJoke.joke"></mat-card-content>
+      <mat-card-actions *ngIf="(authState | async).authenticated">
         <i class="material-icons" *ngIf="!isFavourite(randomJoke.id)" (click)="favourite(true, randomJoke)">
           favorite_border
         </i>

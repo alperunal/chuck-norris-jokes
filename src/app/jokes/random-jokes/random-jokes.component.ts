@@ -4,6 +4,10 @@ import {IJoke} from '../joke.model';
 import {JokeService} from '../joke.service';
 import {MatTabChangeEvent} from '@angular/material';
 import {AuthService} from '../../auth/auth.service';
+import * as FavouriteJokesActions from '../store/jokes.actions';
+import {Store} from '@ngrx/store';
+import * as fromApp from '../../store/app.reducers';
+import * as fromAuth from '../../auth/store/auth.reducers';
 
 @Component({
   selector: 'app-random-jokes',
@@ -12,32 +16,40 @@ import {AuthService} from '../../auth/auth.service';
 })
 export class RandomJokesComponent implements OnInit {
   randomJokes: Observable<IJoke[]>;
-  isAuth = false;
+  favouriteJokes: IJoke[];
+  authState: Observable<fromAuth.State>;
 
   constructor(private jokeService: JokeService,
-              private authService: AuthService) { }
+              private authService: AuthService,
+              private store: Store<fromApp.AppState>) { }
 
   ngOnInit() {
     this.randomJokes = this.jokeService.getRandomJokes();
-    this.isAuth = this.authService.isAuth();
-
+    this.authState = this.store.select('auth');
+    this.store.select('jokes').subscribe(favouriteJokes => {
+      this.favouriteJokes = favouriteJokes.favourites;
+    });
     this.jokeService.tabChange.subscribe((event: MatTabChangeEvent) => {
       if (event.index === 0) {
         this.randomJokes = this.jokeService.getRandomJokes();
       }
     });
-
-    this.authService.authChange.subscribe((status: boolean) => {
-      this.isAuth = status;
-    });
   }
 
   isFavourite(id: number): boolean {
-    return this.jokeService.isFavourite(id);
+    return !!this.favouriteJokes.find((value) => {
+      if (value.id === id) {
+        return true;
+      }
+    });
   }
 
-  favourite(fav: boolean, joke: IJoke): void {
-    this.jokeService.favouriteJoke(fav, joke);
+  favourite(status: boolean, joke: IJoke): void {
+    if (status) {
+      this.store.dispatch(new FavouriteJokesActions.AddJoke(joke));
+    } else {
+      this.store.dispatch(new FavouriteJokesActions.RemoveJoke(joke));
+    }
   }
 
 }
